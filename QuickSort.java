@@ -2,12 +2,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class QuickSort{
-
-
     int count = 0;
+
     /*READ ARRAY NUMBERS*/
     public Integer[] readLines(String filename) throws IOException {
         FileReader fileReader = new FileReader(filename);
@@ -23,9 +23,60 @@ public class QuickSort{
         return lines.toArray(new Integer[lines.size()]);
     }
     
+    public void swap(Integer arr[], int index1, int index2)
+    {
+        int temp;
+        temp = arr[index1];
+        arr[index1] = arr[index2];
+        arr[index2] = temp;
+    }
+
+    public int choosePivot(Integer arr[], int l, int r, int choice)
+    {
+        if(choice == 0)
+        {
+            //pivot as first element
+            return arr[l];
+        }
+        else if(choice == 1)
+        {
+            //pivot as last element
+            return arr[r];
+        }
+        else {
+            // pivot as median
+            int len = arr.length;
+            int median;
+            int middle;
+            if(len % 2 == 0)
+            {
+                middle = len / 2;
+            }
+            else
+            {
+                middle = l + (r-l) /2;
+            }
+
+            int[] array = new int[3];
+            array[0] = arr[l];
+            array[1] = arr[r];
+            array[2] = arr[middle];
+
+            Arrays.sort(array);
+            median = array[1];
+            return median;
+
+        }
+    }
     public int partition(Integer arr[],int l, int r)
     {
-        int pivot = arr[l];
+        //int pivot = arr[l];
+        int pivot = arr[r];
+        int temp2;
+        temp2 = arr[l];
+        arr[l] = arr[r];
+        arr[r] = temp2;
+
         int i = l+1;
         int temp;
         for(int j = l+1; j <= r; j++)
@@ -39,9 +90,13 @@ public class QuickSort{
             }
         }
 
-        temp = arr[l];
+        /*temp = arr[l];
         arr[l]= arr[i-1];
-        arr[i-1] = temp;
+        arr[i-1] = temp;*/
+
+        //swap 
+        swap(arr, l, i-1);
+        
         return i-1;
     }
 
