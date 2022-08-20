@@ -7,7 +7,7 @@ import java.util.List;
 
 public class QuickSort{
     int count = 0;
-
+    int mid;
     /*READ ARRAY NUMBERS*/
     public Integer[] readLines(String filename) throws IOException {
         FileReader fileReader = new FileReader(filename);
@@ -23,6 +23,7 @@ public class QuickSort{
         return lines.toArray(new Integer[lines.size()]);
     }
     
+    /*SWAP FUNCNTION*/
     public void swap(Integer arr[], int index1, int index2)
     {
         int temp;
@@ -45,38 +46,65 @@ public class QuickSort{
         }
         else {
             // pivot as median
-            int len = arr.length;
+            int len = (r - l) + 1;
             int median;
             int middle;
+
             if(len % 2 == 0)
             {
                 middle = len / 2;
+                middle -= 1;
             }
             else
             {
                 middle = l + (r-l) /2;
             }
-
             int[] array = new int[3];
             array[0] = arr[l];
             array[1] = arr[r];
             array[2] = arr[middle];
 
             Arrays.sort(array);
+            /*for(int j = 0; j<3; j++)
+            {
+                System.out.print(array[j]);
+            }
+            System.out.println("");*/
             median = array[1];
+            if(median == arr[l])
+            {
+                mid = l;
+            }
+            else if(median == arr[r])
+            {
+                mid = r;
+            }
+            else {
+                mid = middle;
+            }
+
             return median;
 
         }
     }
-    public int partition(Integer arr[],int l, int r)
+
+    public int partition(Integer arr[],int l, int r, int pivot,int choice)
     {
         //int pivot = arr[l];
-        int pivot = arr[r];
-        int temp2;
+        //int pivot = arr[r];
+        /*int temp2;
         temp2 = arr[l];
         arr[l] = arr[r];
-        arr[r] = temp2;
-
+        arr[r] = temp2;*/
+        if(choice == 1)
+        {
+            swap(arr, l, r);
+        }
+        else if(choice == 2)
+        {
+            swap(arr,l,mid);
+        }
+        
         int i = l+1;
         int temp;
         for(int j = l+1; j <= r; j++)
@@ -96,7 +124,7 @@ public class QuickSort{
 
         //swap 
         swap(arr, l, i-1);
-        
+
         return i-1;
     }
 
@@ -104,15 +132,17 @@ public class QuickSort{
     {
         if(first < end)
         {
-            int p = partition(arr, first, end);
+            int pivot = choosePivot(arr, first, end, 1);
+            int p = partition(arr, first, end, pivot, 1);
             quickSort(arr,first, p-1);
             count += (p-1) - first + 1;
             quickSort(arr, p+1, end);
             count += end - (p+1) + 1;
         }
     }
+
     public static void main(String[] args) throws IOException {
-        Integer[] intArray = new Integer[]{10,2,9,3,1,8};
+        Integer[] intArray = new Integer[]{8,2,4,5,7,1};
         int len = intArray.length;
         QuickSort obj = new QuickSort();
         Integer[] arr = obj.readLines("input.txt");
