@@ -32,19 +32,14 @@ public class QuickSort{
         arr[index2] = temp;
     }
 
-    public int choosePivot(Integer arr[], int l, int r, int choice)
+    public void choosePivot(Integer arr[], int l, int r, int choice)
     {
-        if(choice == 0)
-        {
-            //pivot as first element
-            return arr[l];
-        }
-        else if(choice == 1)
+        if(choice == 1)
         {
             //pivot as last element
-            return arr[r];
+            swap(arr, l, r);
         }
-        else {
+        else if(choice == 2) {
             // pivot as median
             int len = (r - l) + 1;
             int median;
@@ -59,18 +54,14 @@ public class QuickSort{
             {
                 middle = l + (r-l) /2;
             }
+
             int[] array = new int[3];
             array[0] = arr[l];
             array[1] = arr[r];
             array[2] = arr[middle];
-
             Arrays.sort(array);
-            /*for(int j = 0; j<3; j++)
-            {
-                System.out.print(array[j]);
-            }
-            System.out.println("");*/
             median = array[1];
+
             if(median == arr[l])
             {
                 mid = l;
@@ -83,28 +74,15 @@ public class QuickSort{
                 mid = middle;
             }
 
-            return median;
+            System.out.println("pivot: " + mid);
+            swap(arr,l,mid);
 
         }
     }
 
-    public int partition(Integer arr[],int l, int r, int pivot,int choice)
+    public int partition(Integer arr[],int l, int r)
     {
-        //int pivot = arr[l];
-        //int pivot = arr[r];
-        /*int temp2;
-        temp2 = arr[l];
-        arr[l] = arr[r];
-        arr[r] = temp2;*/
-        if(choice == 1)
-        {
-            swap(arr, l, r);
-        }
-        else if(choice == 2)
-        {
-            swap(arr,l,mid);
-        }
-        
+        int pivot = arr[l];
         int i = l+1;
         int temp;
         for(int j = l+1; j <= r; j++)
@@ -118,10 +96,6 @@ public class QuickSort{
             }
         }
 
-        /*temp = arr[l];
-        arr[l]= arr[i-1];
-        arr[i-1] = temp;*/
-
         //swap 
         swap(arr, l, i-1);
 
@@ -132,8 +106,8 @@ public class QuickSort{
     {
         if(first < end)
         {
-            int pivot = choosePivot(arr, first, end, 1);
-            int p = partition(arr, first, end, pivot, 1);
+            choosePivot(arr, first, end, 1);
+            int p = partition(arr, first, end);
             quickSort(arr,first, p-1);
             count += (p-1) - first + 1;
             quickSort(arr, p+1, end);
@@ -142,18 +116,10 @@ public class QuickSort{
     }
 
     public static void main(String[] args) throws IOException {
-        Integer[] intArray = new Integer[]{8,2,4,5,7,1};
-        int len = intArray.length;
         QuickSort obj = new QuickSort();
         Integer[] arr = obj.readLines("input.txt");
         int size = arr.length;
-        
         obj.quickSort(arr, 0, size-1);
-
-        for(int i = 0; i < size; i++)
-        {
-            System.out.println(arr[i]);
-        }
         System.out.println(obj.count);
     }
 }
